@@ -2,20 +2,19 @@
 
 namespace App\Events;
 
-use App\Models\Order;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 
 class OrderPlacedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $id, $data;
+    public $id, $data, $created_at;
 
     /**
      * Create a new event instance.
@@ -24,10 +23,6 @@ class OrderPlacedEvent implements ShouldBroadcast
      */
     public function __construct(string $title, string $message, $url, $notifId)
     {
-        // $this->url = route('admin.orders.show', ['order' => $order->id]);
-        // $this->title = $customerName . ' placed an order.';
-        // $this->message = 'Order total: ' . $order->total . '.';
-
         //format data for frontend
         $this->data = [
             'url' => $url,
@@ -35,6 +30,7 @@ class OrderPlacedEvent implements ShouldBroadcast
             'message' => $message,
         ];
         $this->id = $notifId;
+        $this->created_at = Carbon::now();
     }
 
     /**

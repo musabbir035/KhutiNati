@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\WebPushRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class WebPushController extends Controller

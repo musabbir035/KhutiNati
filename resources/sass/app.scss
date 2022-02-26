@@ -134,6 +134,9 @@ label {
 #desktopNavbarNotification {
   display: none;
 }
+#dropdownNotificatioLoading {
+  display: none;
+}
 @media (min-width: 768px) {
   #desktopNavbarNotification {
     display: list-item;
@@ -180,13 +183,11 @@ label {
   padding: 5px;
   border-radius: 5px;
   margin-bottom: 2px;
+  margin-top: 2px;
   transition: all 0.2s;
   &:hover {
     background-color: #d0d0d0;
     color: rgba(0, 0, 0, 0.9);
-  }
-  &:first-child {
-    margin-top: 2px;
   }
 }
 .notification-item-title {
@@ -194,6 +195,9 @@ label {
 }
 .notification-item-message {
   font-size: 0.8rem;
+}
+.notification-item-time {
+  font-size: 0.7rem;
 }
 .notification-item.unread {
   background-color: #f0f0f0;

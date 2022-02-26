@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
@@ -32,7 +31,7 @@ class UserController extends Controller
         ]);
         return redirect()->route('admin.users.index')->with([
             'title' => 'Success',
-            'message' => 'User added',
+            'message' => 'User added.',
             'code' => 200
         ]);
     }
@@ -65,7 +64,7 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')->with([
             'title' => 'Success',
-            'message' => 'User updated',
+            'message' => 'User updated.',
             'code' => '200'
         ]);
     }

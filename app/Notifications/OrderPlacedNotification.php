@@ -48,12 +48,6 @@ class OrderPlacedNotification extends Notification
             ->body($this->message)
             ->action('View', 'view_app')
             ->data(['url' => $this->url]);
-        // return (new WebPushMessage)
-        //     ->title('Hello from Laravel!')
-        //     ->icon('/notification-icon.png')
-        //     ->body('Thank you for using our application.')
-        //     ->action('View app', 'view_app')
-        //     ->data(['id' => $notification->id]);
     }
 
     /**

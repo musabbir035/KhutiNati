@@ -13,7 +13,8 @@
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
         "livewire/livewire": "^2.10",
-        "pusher/pusher-php-server": "^7.0"
+        "pusher/pusher-php-server": "^7.0",
+        "carlos-meneses/laravel-mpdf": "^2.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

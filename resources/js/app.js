@@ -1,6 +1,5 @@
 require("./bootstrap");
 window.bootstrap = require("bootstrap");
-window.Quill = require("quill");
 window.Swal = require("sweetalert2");
 
 const body = document.body;
@@ -68,6 +67,7 @@ window.showFlashMessage = (
   }, 3000);
 };
 
+import axios from "axios";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 
@@ -79,37 +79,61 @@ window.formatDateAsTimeAgo = (date) => {
   return timeAgo.format(Date.parse(date), "round");
 };
 
-//creates notification item and populates the passed parentElement
-window.createNotifElement = (notifications, parentElement) => {
+//creates notification element and populates the passed parentElement
+window.createNotifElement = (
+  notification,
+  parentElement,
+  method = "append"
+) => {
   let notifItem = document.createElement("a");
   notifItem.classList.add("notification-item");
-  if (!notifications.read_at) {
+  if (!notification.read_at) {
     notifItem.classList.add("unread");
   }
-  notifItem.setAttribute("href", notifications.data.url);
-  notifItem.setAttribute("id", notifications.id);
+  //notifItem.setAttribute("href", notification.data.url);
+  notifItem.setAttribute("id", notification.id);
 
   let notifTitle = document.createElement("div");
   notifTitle.classList.add("notification-item-title");
-  notifTitle.innerText = notifications.data.title || "";
+  notifTitle.innerText = notification.data.title || "";
 
   let notifMessage = document.createElement("div");
   notifMessage.classList.add("notification-item-message");
-  notifMessage.innerText = notifications.data.message;
+  notifMessage.innerText = notification.data.message;
 
-  notifItem.append(notifTitle, notifMessage);
-  parentElement.prepend(notifItem);
+  let notifTime = document.createElement("div");
+  notifTime.classList.add("notification-item-time");
+  notifTime.innerText = formatDateAsTimeAgo(notification.created_at);
+
+  notifItem.append(notifTitle, notifMessage, notifTime);
+
+  if (method == "append") {
+    console.log("pp");
+    parentElement.appendChild(notifItem);
+  } else {
+    console.log("aa");
+    parentElement.prepend(notifItem);
+  }
 };
 
+let notifBadges = document.querySelectorAll(".notification-badge");
 window.notificationChecked = (id) => {
-  axios.post("/admin/notification-check/" + id);
+  if (notifBadges[0]?.innerText != "" && notifBadges[0]?.innerText > 0) {
+    axios.get("/admin/notification-check/" + id);
+  }
 };
 
 // reset notification badge count
 window.setNotificationBadgeCount = (count, method = "reset") => {
-  let notifBadges = document.querySelectorAll("notification-badge");
   for (let i = 0; i < notifBadges.length; i++) {
-    notifBadges[i].innerText = count;
+    let curCount = Number.parseInt(notifBadges[i].innerText);
+
+    if (method === "reset") {
+      notifBadges[i].innerText = count;
+    } else {
+      let newCount = curCount + count;
+      notifBadges[i].innerText = newCount;
+    }
 
     notifBadges[i].style.display = "none";
     if (count > 0) {
@@ -117,3 +141,94 @@ window.setNotificationBadgeCount = (count, method = "reset") => {
     }
   }
 };
+
+let disableScroll = false;
+const dropdownNotificatioLoading = document.querySelector(
+  "#dropdownNotificatioLoading"
+);
+window.loadNotifications = (
+  skip,
+  parentElement,
+  notificationAddMethod = "append"
+) => {
+  dropdownNotificatioLoading.style.display = "block";
+  axios
+    .get(`/notifications?skip=${skip}`)
+    .then((res) => {
+      res.data.notifications.forEach((el) => {
+        // populate notifications dropdown
+        createNotifElement(el, parentElement, notificationAddMethod);
+      });
+
+      if (res.data.notifications.length == 0) {
+        disableScroll = true;
+      }
+
+      document.querySelector("#unreadCount").innerText = res.data.unread_count;
+      setNotificationBadgeCount(res.data.uncheck_count);
+    })
+    .finally(() => {
+      dropdownNotificatioLoading.style.display = "none";
+    });
+};
+
+let notifSkip = 0;
+let notifDropdownBody = document.querySelector(".notification-dropdown-body");
+// get notifications
+loadNotifications(notifSkip, notifDropdownBody);
+
+//load more notification on scroll down
+if (notifDropdownBody) {
+  notifDropdownBody.onscroll = (ev) => {
+    if (!disableScroll) {
+      if (
+        notifDropdownBody.scrollTop >=
+        Math.floor(
+          notifDropdownBody.scrollHeight - notifDropdownBody.offsetHeight
+        )
+      ) {
+        let dropdownNotifCount =
+          notifDropdownBody.querySelectorAll(".notification-item").length;
+        loadNotifications(dropdownNotifCount, notifDropdownBody);
+      }
+    }
+  };
+}
+
+// mark dropdown notifications as read when clicked
+// let dropdownNotifItems = document.querySelectorAll(".notification-item");
+// console.log(dropdownNotifItems.length);
+// dropdownNotifItems.forEach((el) => {
+//   el.addEventListener("click", (ev) => {
+//     // ev.stopPropagation();
+//     // ev.preventDefault();
+//     alert(ev.target.id);
+//     console.log(ev.target.id);
+//     return false;
+//   });
+// });
+
+document.addEventListener("click", function (e) {
+  if (
+    e.target &&
+    (e.target.classList.contains("notification-item") ||
+      e.target.parentElement.classList.contains("notification-item"))
+  ) {
+    let id;
+    if (e.target.classList.contains("notification-item")) {
+      id = e.target.id;
+    } else {
+      id = e.target.parentElement.id;
+    }
+    e.preventDefault();
+    console.log(id);
+    axios
+      .post("/admin/notification-mark-read", { id })
+      .then((res) => {
+        e.target.parentElement.classList.remove("unread");
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
+});

@@ -97,9 +97,13 @@
                   You have <span id="unreadCount"></span> unread notifications
                 </div>
                 <div class="notification-dropdown-body">
+                  <div class="spinner spinner--double-bounce" id="dropdownNotificatioLoading">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                  </div>
                 </div>
                 <div class="notification-dropdown-footer">
-                  <a href="#" class="td-none">See all notifications</a>
+                  <a href="{{ route('admin.notifications') }}" class="td-none">See all notifications</a>
                 </div>
               </div>
             </li>
@@ -143,9 +147,9 @@
     </div>
   </div>
 
+  <script src="//js.pusher.com/3.1/pusher.min.js"></script>
   <script src="{{ asset('js/app.js') }}"></script>
   <script src="{{ asset('js/push.js') }}"></script>
-  <script src="//js.pusher.com/3.1/pusher.min.js"></script>
   <script>
     // shows success and error messages
     if('{{ session("message") }}' !== '') {
@@ -157,38 +161,25 @@
     document.querySelector("#logoutBtn")?.addEventListener('click', () => {
       document.querySelector('#logoutForm').submit()
     })
-
-    let notifSkip = 0;
-    let notifDropdown = document.querySelector('.notification-dropdown-body');
-    // get notifications
-    axios.get(`/notifications?skip=${notifSkip}`).then((res) => {
-      res.data.notifications.forEach(el => {
-        // populate notifications dropdown
-        createNotifElement(el, notifDropdown)
-      });
-
-      document.querySelector('#unreadCount').innerText = res.data.unread_count;
-      setNotificationBadgeCount(res.data.uncheck_count);
-    });
-
+    
     // reset notification badge on top right corner of the bell icon
-    // when bell icon is clicked
-    let notificationDropdownBtn = document.querySelector('#notificationDropdown');
-    notificationDropdownBtn.addEventListener('click', () => {
-      notificationChecked('{{ auth()->id() }}');
-    })
+    // when the bell icon is clicked
+    let notificationDropdownBtn = document.querySelector("#notificationDropdown");
+    notificationDropdownBtn?.addEventListener("click", () => {
+      notificationChecked("{{ auth()->id() }}");
+      setNotificationBadgeCount(0);
+    });
 
     // subscribe to channels for real time notifications
     let channel = pusher.subscribe("private-admin-notification");
-    channel.bind("pusher:subscription_succeeded", function (members) {
-      //console.log("successfully subscribed!");
-    });
 
     // when a real time notification is received create notification DOM element
     // and add that to the notification dropdown
+    let notifDropdownBody = document.querySelector(".notification-dropdown-body");
     channel.bind("admin-notification-event", function (data) {
-      createNotifElement(data, notifDropdown);
-    });    
+      createNotifElement(data, notifDropdownBody, 'prepend');
+      setNotificationBadgeCount(1, "add");
+    });
   </script>
   @livewireScripts
   @yield('livewireViewScripts')

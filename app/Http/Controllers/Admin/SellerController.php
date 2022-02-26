@@ -35,7 +35,8 @@ class SellerController extends Controller
         }
 
         return redirect()->route('admin.sellers.create')->with([
-            'message' => 'Seller added',
+            'title' => 'Success',
+            'message' => 'Seller added.',
             'code' => 200
         ]);
     }
@@ -69,12 +70,13 @@ class SellerController extends Controller
             }, 3);
         } catch (Exception $e) {
             return back()->withInput($request->input())->with([
-                'submit_error' => 'Something went wrong'
+                'submit_error' => 'Something went wrong.'
             ]);
         }
 
         return redirect()->route('admin.sellers.index')->with([
-            'message' => 'Seller updated',
+            'title' => 'Success',
+            'message' => 'Seller updated.',
             'code' => 200
         ]);
     }

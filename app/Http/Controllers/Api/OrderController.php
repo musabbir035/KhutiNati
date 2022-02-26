@@ -44,8 +44,8 @@ class OrderController extends Controller
                 $userId = Auth::id();
             }
 
-            $address = $request->has('addressId')
-                ? Address::find($request->input('addressId'))
+            $address = $request->has('address_id')
+                ? Address::find($request->input('address_id'))
                 : Address::create([
                     'name' => $request->input('name'),
                     'mobile' => $request->input('mobile'),
@@ -119,7 +119,6 @@ class OrderController extends Controller
             DB::rollBack();
 
             return response([
-                'title' => 'Failed',
                 'message' => 'Something went wrong.',
             ], 500);
         }

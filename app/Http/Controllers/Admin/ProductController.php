@@ -41,7 +41,8 @@ class ProductController extends Controller
         }
 
         return redirect()->route('admin.products.create')->with([
-            'message' => 'Product added',
+            'title' => 'Success',
+            'message' => 'Product added.',
             'code' => 200
         ]);
     }
@@ -88,12 +89,13 @@ class ProductController extends Controller
             }, 3);
         } catch (Exception $e) {
             return back()->withInput($request->input())->with([
-                'submit_error' => 'Something went wrong'
+                'submit_error' => 'Something went wrong.'
             ]);
         }
 
         return redirect()->route('admin.products.show', ['product' => $id])->with([
-            'message' => 'Product updated',
+            'title' => 'Success',
+            'message' => 'Product updated.',
             'code' => 200
         ]);
     }

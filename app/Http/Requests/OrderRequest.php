@@ -15,7 +15,7 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         return [
-            'addressId' => 'nullable|exists:addresses,id',
+            'address_id' => 'nullable|exists:addresses,id',
             'name' => 'required_without:addressId|string|max:255',
             'mobile' => 'required_without:addressId|string|max:11',
             'address' => 'required_without:addressId|string|max:255',

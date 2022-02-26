@@ -42,7 +42,7 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.categories.create')->with([
             'title' => 'Success',
-            'message' => 'Category added',
+            'message' => 'Category added.',
             'code' => 200
         ]);
     }
@@ -87,13 +87,13 @@ class CategoryController extends Controller
             }, 3);
         } catch (Exception $e) {
             return back()->withInput($request->input())->with([
-                'submit_error' => 'Something went wrong'
+                'submit_error' => 'Something went wrong.'
             ]);
         }
 
         return redirect()->route('admin.categories.show', ['category' => $id])->with([
             'title' => 'Success',
-            'message' => 'Category updated',
+            'message' => 'Category updated.',
             'code' => 200
         ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 
@@ -54,5 +55,10 @@ class OrderService
             'index' => $index,
             'inventory' => $inventory
         ];
+    }
+
+    public static function printInvoice($orderId)
+    {
+        $order = Order::findOrFail($orderId);
     }
 }

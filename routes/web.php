@@ -82,6 +82,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/orders/{order}/update-status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
         Route::resource('orders', AdminOrderController::class)->except(['index']);
 
+        Route::get('/notifications', [NotificationController::class, 'check'])->name('notifications');
         Route::get('/notification-check/{id}', [NotificationController::class, 'check']);
+        Route::post('/notification-mark-read', [NotificationController::class, 'markAsRead']);
     });
 });
+
+
+Route::get('/notiftest', [NotificationController::class, 'test']);
