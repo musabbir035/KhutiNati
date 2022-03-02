@@ -3,14 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Category;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class ViewServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Register services.
      *
      * @return void
      */
@@ -20,12 +19,15 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap services.
      *
      * @return void
      */
     public function boot()
     {
-        Paginator::useBootstrapFive();
+        View::composer('main.menu.category-dropdown', function ($view) {
+            $categories = Category::doesntHave('parent')->get();
+            $view->with('categories', $categories);
+        });
     }
 }

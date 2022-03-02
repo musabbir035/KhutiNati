@@ -93,4 +93,19 @@ class AuthController extends Controller
         }
         return redirect()->route('admin.account')->with($response);
     }
+
+    public function showPasswordRecoveryForm()
+    {
+        return view('auth.password-recovery');
+    }
+
+    public function passwordRecovery()
+    {
+        return redirect()->route('password.recovery.confirm.form');
+    }
+
+    public function showPasswordRecoveryConfirmForm()
+    {
+        return view('auth.password-recovery-confirm');
+    }
 }

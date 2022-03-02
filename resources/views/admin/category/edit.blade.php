@@ -33,7 +33,8 @@
           <select name="parent_id" id="parent_id" class="form-select @error('parent_id') is-invalid @enderror">
             <option value="">--Select a category--</option>
             @foreach ($categories as $cat)
-            <option value="{{ $cat->id }}" @if( in_array($cat->id, [ old('parent_id'), $category->parent->id])) selected
+            <option value="{{ $cat->id }}" @if( in_array($cat->id, [ old('parent_id'), $category->parent?->id]))
+              selected
               @endif>
               {{ $cat->name }}
             </option>

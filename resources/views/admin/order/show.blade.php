@@ -69,10 +69,13 @@
         <tr>
           <td>{{ $orderProduct->product->name }}</td>
           <td>{{ $orderProduct->quantity }}</td>
-          <td>৳ {{ $orderProduct->product->discounted_price ?? $orderProduct->product->price }}</td>
-          <td>
-            ৳ {{ $orderProduct->quantity * $orderProduct->product->discounted_price ?? $orderProduct->product->price }}
-          </td>
+          @if($orderProduct->product->discounted_price)
+          <td>৳ {{ $orderProduct->product->discounted_price }}</td>
+          <td>৳ {{ $orderProduct->quantity * $orderProduct->product->discounted_price }}</td>
+          @else
+          <td>৳ {{ $orderProduct->product->price }}</td>
+          <td>৳ {{ $orderProduct->quantity * $orderProduct->product->price }}</td>
+          @endif
         </tr>
         @endforeach
         <tr>

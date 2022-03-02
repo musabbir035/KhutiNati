@@ -82,7 +82,7 @@
 @section('pageScripts')
 <script>
   let statusUpdateBtn =  document.querySelector('#statusUpdateBtn');
-  statusUpdateBtn.addEventListener('click', () => {
+  statusUpdateBtn?.addEventListener('click', () => {
     let loading = document.querySelector('#loadingSpinner');
     loading.style.display = 'block';
     axios.post('{{ route("admin.users.update-status", ["user" => $user->id]) }}').then(res => {

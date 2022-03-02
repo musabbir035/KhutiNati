@@ -13,7 +13,7 @@
     @endif
   </title>
   <link rel="shortcut icon" href="{{ asset('img/logo.png') }}" type="image/x-icon">
-  <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -148,7 +148,7 @@
   </div>
 
   <script src="//js.pusher.com/3.1/pusher.min.js"></script>
-  <script src="{{ asset('js/app.js') }}"></script>
+  <script src="{{ asset('js/admin.js') }}"></script>
   <script src="{{ asset('js/push.js') }}"></script>
   <script>
     // shows success and error messages

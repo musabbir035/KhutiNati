@@ -14,58 +14,23 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand navbar-light navbar-top">
-    <div class="container-fluid">
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <a class="navbar-logo" href="/">
-          <img src="{{ asset('img/logo.png') }}" alt="">
-        </a>
-        <div class="input-group">
-          <input type="text" class="form-control" id="searchQuery" placeholder="Search products..."
-            aria-label="Search products..." aria-describedby="searchSubmit">
-          <button class="btn btn-primary shadow-none" type="button" id="searchSubmit">Search</button>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <nav class="navbar navbar-expand navbar-dark bg-primary navbar-main">
-    <div class="container-fluid">
+  <header class="fixed-top">
+    <nav class="navbar navbar-expand navbar-light navbar-top">
       <div class="collapse navbar-collapse">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Categories
-              <i class="fa-solid fa-chevron-down dropdown-menu-icon"></i>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-        </ul>
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#" title="My Cart">
-              <i class="fa-solid fa-cart-shopping"></i>
-            </a>
+            <a class="nav-link" href="#">About us</a>
           </li>
           @auth
           <li class="nav-item">
             <a class="nav-link"
-              href="@if(in_array(auth()->user()->role, [1,2])) {{ route('admin.account') }} @else {{ route('user.account') }} @endif"
-              title="My Account">
-              <i class="fa-solid fa-user"></i>
+              href="@if(in_array(auth()->user()->role, [1,2])) {{ route('admin.account') }} @else {{ route('user.account') }} @endif">
+              My account
             </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" id="logoutBtn" href="#" title="Log out">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              Logout
             </a>
             <form action="{{ route('logout') }}" method="POST" id="logoutForm" class="d-none">
               @csrf
@@ -73,23 +38,76 @@
           </li>
           @else
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('login') }}" title="My Account">
-              <i class="fa-solid fa-user"></i>
+            <a class="nav-link" href="{{ route('login') }}">
+              Login
             </a>
           </li>
           @endauth
         </ul>
       </div>
-    </div>
-  </nav>
+    </nav>
+    <nav class="navbar navbar-expand navbar-light navbar-main">
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item pe-2">
+            <a class="navbar-brand" href="/">
+              <img src="{{ asset('img/logo.png') }}" alt="">
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-search">
+          <li class="nav-item ps-2 pe-2 w-100">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search products" aria-label="Recipient's username"
+                aria-describedby="button-addon2">
+              <button class="btn" type="button" id="button-addon2">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item ps-2">
+            <a class="nav-link navbar-cart-icon text-center" href="javascript:void(0)" data-cart-open-btn>
+              <i class="fa-solid fa-cart-shopping"></i>
+              <span class="badge bg-danger"></span>
+              <div class="fw-bold" data-cart-total>৳ 0</div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
 
-  @yield('main')
+  <aside class="sidebar-cart sidebar" data-sidebar-cart>
+    <div class="sidebar-cart-header">
+      <h4>My Cart</h4>
+      <a href="javascript:void(0)" class="link-secondary cart-close" data-cart-close-btn>
+        <i class="fa-solid fa-xmark"></i>
+      </a>
+    </div>
+    <div class="sidebar-cart-body" data-cart-container>
+      <div class="empty-cart" data-cart-empty>
+        Your Cart is empty
+      </div>
+    </div>
+    <div class="sidebar-cart-footer">
+      <button class="btn btn-primary w-100 h-100 d-flex flex-row">
+        <div class="w-50 text-center fw-bold">CHECKOUT</div>
+        <div class="w-50 text-center fw-bold font-2" data-cart-total>৳ 0</div>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    @yield('main')
+  </main>
 
   <div class="footer"></div>
 
   <script src="{{ asset('js/app.js') }}"></script>
   <script>
-    document.querySelector("#logoutBtn").addEventListener('click', () => {
+    document.querySelector("#logoutBtn")?.addEventListener('click', () => {
       document.querySelector('#logoutForm').submit()
     })
   </script>

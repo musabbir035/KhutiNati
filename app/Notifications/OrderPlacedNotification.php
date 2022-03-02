@@ -47,7 +47,7 @@ class OrderPlacedNotification extends Notification
             ->icon(asset('img/logo.png'))
             ->body($this->message)
             ->action('View', 'view_app')
-            ->data(['url' => $this->url]);
+            ->data(['url' => $this->url  . '?notif_id=' . $this->id]);
     }
 
     /**
@@ -63,7 +63,7 @@ class OrderPlacedNotification extends Notification
         return [
             'title' => $this->title,
             'message' => $this->message,
-            'url' => $this->url
+            'url' => $this->url . '?notif_id=' . $this->id
         ];
     }
 }

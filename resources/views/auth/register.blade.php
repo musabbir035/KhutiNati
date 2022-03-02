@@ -7,7 +7,7 @@
     Already have an account?
     <a href="{{ route('login') }}" class="link-primary text-decoration-none">Login here.</a>
   </p>
-  <div class="card mt-2 register-card">
+  <div class="card mt-2 register-card shadow-none">
     <div class="card-body">
       <form action="{{ route('register.submit') }}" method="POST">
         @csrf

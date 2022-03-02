@@ -1,234 +1,302 @@
-require("./bootstrap");
-window.bootstrap = require("bootstrap");
-window.Swal = require("sweetalert2");
-
-const body = document.body;
-const sidebarToggle = document.querySelector("#sidebarToggle");
-sidebarToggle?.addEventListener("click", () => {
-  let windowWidth = window.innerWidth;
-  if (windowWidth >= 992) {
-    if (body.classList.contains("sidebar-closed")) {
-      body.classList.remove("sidebar-closed");
-      body.classList.add("sidebar-open");
-    } else {
-      body.classList.add("sidebar-closed");
-      body.classList.remove("sidebar-open");
-    }
-  } else {
-    if (body.classList.contains("sidebar-open")) {
-      body.classList.remove("sidebar-open");
-      body.classList.add("sidebar-closed");
-    } else {
-      body.classList.remove("sidebar-closed");
-      body.classList.add("sidebar-open");
-    }
-  }
+let sidebarCart = document.querySelector("[data-sidebar-cart]");
+let cartOpenBtn = document.querySelector("[data-cart-open-btn]");
+cartOpenBtn.addEventListener("click", () => {
+  sidebarCart.classList.toggle("open");
 });
 
-const sidebarClose = document.querySelector("#sidebarClose");
-sidebarClose?.addEventListener("click", () => {
-  body.classList.remove("sidebar-open");
-  body.classList.add("sidebar-closed");
+let cartCloseBtn = document.querySelector("[data-cart-close-btn]");
+cartCloseBtn.addEventListener("click", () => {
+  sidebarCart.classList.toggle("open");
 });
 
-window.showFlashMessage = (
-  title = "",
-  message = "Hello",
-  variant = "success"
-) => {
-  let msgElement = document.createElement("div");
-  msgElement.classList.add("flash-message");
-  msgElement.classList.add(variant);
+let categoryMobileItems = document.querySelectorAll("[data-cartgory-dropdown]");
+categoryMobileItems.forEach((el) => {
+  el.addEventListener("click", (e) => {
+    el.parentElement.classList.toggle("open");
+  });
+});
 
-  let msgTitle = document.createElement("div");
-  msgTitle.classList.add("flash-message-title");
-  msgTitle.textContent = title;
-
-  let msgBody = document.createElement("div");
-  msgBody.classList.add("flash-message-body");
-  msgBody.textContent = message;
-
-  msgElement.appendChild(msgTitle);
-  msgElement.appendChild(msgBody);
-  body.appendChild(msgElement);
-
-  setTimeout(function () {
-    let fadeEffect = setInterval(function () {
-      if (!msgElement.style.opacity) {
-        msgElement.style.opacity = 0.9;
-      }
-      if (msgElement.style.opacity > 0) {
-        msgElement.style.opacity -= 0.01;
-      } else {
-        msgElement.remove();
-        clearInterval(fadeEffect);
-      }
-    }, 20);
-  }, 3000);
-};
-
-import axios from "axios";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
-
-TimeAgo.addDefaultLocale(en);
-const timeAgo = new TimeAgo("en-US");
-
-window.formatDateAsTimeAgo = (date) => {
-  console.log(date);
-  return timeAgo.format(Date.parse(date), "round");
-};
-
-//creates notification element and populates the passed parentElement
-window.createNotifElement = (
-  notification,
-  parentElement,
-  method = "append"
-) => {
-  let notifItem = document.createElement("a");
-  notifItem.classList.add("notification-item");
-  if (!notification.read_at) {
-    notifItem.classList.add("unread");
-  }
-  //notifItem.setAttribute("href", notification.data.url);
-  notifItem.setAttribute("id", notification.id);
-
-  let notifTitle = document.createElement("div");
-  notifTitle.classList.add("notification-item-title");
-  notifTitle.innerText = notification.data.title || "";
-
-  let notifMessage = document.createElement("div");
-  notifMessage.classList.add("notification-item-message");
-  notifMessage.innerText = notification.data.message;
-
-  let notifTime = document.createElement("div");
-  notifTime.classList.add("notification-item-time");
-  notifTime.innerText = formatDateAsTimeAgo(notification.created_at);
-
-  notifItem.append(notifTitle, notifMessage, notifTime);
-
-  if (method == "append") {
-    console.log("pp");
-    parentElement.appendChild(notifItem);
-  } else {
-    console.log("aa");
-    parentElement.prepend(notifItem);
-  }
-};
-
-let notifBadges = document.querySelectorAll(".notification-badge");
-window.notificationChecked = (id) => {
-  if (notifBadges[0]?.innerText != "" && notifBadges[0]?.innerText > 0) {
-    axios.get("/admin/notification-check/" + id);
-  }
-};
-
-// reset notification badge count
-window.setNotificationBadgeCount = (count, method = "reset") => {
-  for (let i = 0; i < notifBadges.length; i++) {
-    let curCount = Number.parseInt(notifBadges[i].innerText);
-
-    if (method === "reset") {
-      notifBadges[i].innerText = count;
-    } else {
-      let newCount = curCount + count;
-      notifBadges[i].innerText = newCount;
-    }
-
-    notifBadges[i].style.display = "none";
-    if (count > 0) {
-      notifBadges[i].style.display = "inline-block";
-    }
-  }
-};
-
-let disableScroll = false;
-const dropdownNotificatioLoading = document.querySelector(
-  "#dropdownNotificatioLoading"
-);
-window.loadNotifications = (
-  skip,
-  parentElement,
-  notificationAddMethod = "append"
-) => {
-  dropdownNotificatioLoading.style.display = "block";
-  axios
-    .get(`/notifications?skip=${skip}`)
-    .then((res) => {
-      res.data.notifications.forEach((el) => {
-        // populate notifications dropdown
-        createNotifElement(el, parentElement, notificationAddMethod);
-      });
-
-      if (res.data.notifications.length == 0) {
-        disableScroll = true;
-      }
-
-      document.querySelector("#unreadCount").innerText = res.data.unread_count;
-      setNotificationBadgeCount(res.data.uncheck_count);
-    })
-    .finally(() => {
-      dropdownNotificatioLoading.style.display = "none";
-    });
-};
-
-let notifSkip = 0;
-let notifDropdownBody = document.querySelector(".notification-dropdown-body");
-// get notifications
-loadNotifications(notifSkip, notifDropdownBody);
-
-//load more notification on scroll down
-if (notifDropdownBody) {
-  notifDropdownBody.onscroll = (ev) => {
-    if (!disableScroll) {
-      if (
-        notifDropdownBody.scrollTop >=
-        Math.floor(
-          notifDropdownBody.scrollHeight - notifDropdownBody.offsetHeight
-        )
-      ) {
-        let dropdownNotifCount =
-          notifDropdownBody.querySelectorAll(".notification-item").length;
-        loadNotifications(dropdownNotifCount, notifDropdownBody);
-      }
-    }
-  };
+/*****
+ * SECTION: Handle Cart
+ */
+const cartContainer = document.querySelector("[data-cart-container]");
+let cart = [];
+if (localStorage.getItem("cart") != null) {
+  cart = JSON.parse(localStorage.getItem("cart"));
 }
 
-// mark dropdown notifications as read when clicked
-// let dropdownNotifItems = document.querySelectorAll(".notification-item");
-// console.log(dropdownNotifItems.length);
-// dropdownNotifItems.forEach((el) => {
-//   el.addEventListener("click", (ev) => {
-//     // ev.stopPropagation();
-//     // ev.preventDefault();
-//     alert(ev.target.id);
-//     console.log(ev.target.id);
-//     return false;
-//   });
-// });
+initCart(cart);
 
-document.addEventListener("click", function (e) {
-  if (
-    e.target &&
-    (e.target.classList.contains("notification-item") ||
-      e.target.parentElement.classList.contains("notification-item"))
-  ) {
-    let id;
-    if (e.target.classList.contains("notification-item")) {
-      id = e.target.id;
-    } else {
-      id = e.target.parentElement.id;
+// NOTE: Initializes cart using cart data stored in local storage
+function initCart(cartItems) {
+  if (cartItems == null) return;
+
+  document.querySelector("[data-cart-empty]").style.display = "none";
+
+  cartContainer.querySelectorAll("[data-product]").forEach((el) => {
+    el.remove();
+  });
+
+  cartItems.forEach((item) => {
+    cartContainer.appendChild(createCartItem(item));
+  });
+
+  updateCartTotal();
+}
+
+// Updates sum of price of all products added to the cart
+function updateCartTotal() {
+  let cartPrices = cart.map((a) =>
+    a.discountedPrice ? a.discountedPrice * a.quantity : a.price * a.quantity
+  );
+
+  const cartTotalElements = document.querySelectorAll("[data-cart-total]");
+
+  cartTotalElements.forEach((el) => {
+    el.innerText =
+      "৳ " + cartPrices.reduce((a, b) => parseInt(a) + parseInt(b), 0);
+  });
+}
+
+checkCart();
+// Checks products added to the cart in localstorage
+// and updates product cards accordingly
+function checkCart() {
+  if (cart == null) return;
+
+  let productCards = document.querySelectorAll("[data-product]");
+  let ids = cart.map((a) => a.id);
+  productCards.forEach((el) => {
+    let id = el.id.split("__")[1];
+    if (ids.includes(id)) {
+      el.querySelector("[data-product-footer]")?.classList.add("in-cart");
+      let quantity = cart.find((a) => a.id === id).quantity;
+      el.querySelector("[data-product-quantity]").innerText = quantity;
+
+      if (quantity >= 5) {
+        el.querySelector("[data-cart-item-increase]").disabled = true;
+      }
     }
-    e.preventDefault();
-    console.log(id);
-    axios
-      .post("/admin/notification-mark-read", { id })
-      .then((res) => {
-        e.target.parentElement.classList.remove("unread");
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
+  });
+
+  updateCartIconBadge();
+}
+
+function updateCartIconBadge() {
+  if (cart.length > 0) {
+    cartOpenBtn.querySelector("span").innerText = cart.length;
+    return;
+  }
+  cartOpenBtn.querySelector("span").innerText = "";
+}
+
+// Creats individual cart product DOM element for sidebar cart
+function createCartItem(product) {
+  let finalPrice = product.price;
+  if (product.discountedPrice) {
+    finalPrice = product.discountedPrice;
+  }
+
+  let cartItem = document.createElement("div");
+  cartItem.classList.add("cart-item");
+  cartItem.setAttribute("id", "product__" + product.id);
+  cartItem.setAttribute("data-product", "");
+
+  cartItemInner = `
+    <img class="cart-item-img" src="${product.image}" alt="" data-product-image>
+    <div class="cart-item-details">
+      <div class="cart-item-title" data-product-name>${product.name}</div>
+      <div class="cart-item-unit">
+        <span data-product-price>৳ ${finalPrice}</span> / 
+        <span data-product-unit>${product.unit}</span>
+      </div>
+      <div class="cart-item-tools">
+        <button class="cart-tool-btn text-start" data-cart-item-decrease>
+          <i class="fa-solid fa-angle-left"></i>
+        </button>
+        <span class="me-1 ms-1" data-product-quantity>${product.quantity}</span>
+        <button class="cart-tool-btn text-end" data-cart-item-increase>
+          <i class="fa-solid fa-angle-right"></i>
+        </button>
+      </div>
+    </div>
+    <div class="cart-item-price" data-product-total>
+      ৳ ${finalPrice * product.quantity}
+    </div>
+    <div class="cart-item-remove" data-cart-item-remove>
+      <i class="fa-solid fa-xmark"></i>
+    </div>`;
+
+  cartItem.innerHTML = cartItemInner;
+  return cartItem;
+}
+
+// Adds products to sidebar cart and
+// also stores them in the local storage
+function addToCart(el) {
+  document.querySelector("[data-cart-empty]").style.display = "none";
+
+  let id = el.parentElement.parentElement.id.split("__")[1];
+
+  let name = el.parentElement.parentElement.querySelector(
+    "[data-product-title]"
+  ).innerText;
+
+  let unit = el.parentElement.parentElement.querySelector(
+    "[data-product-unit]"
+  ).innerText;
+
+  let price = el.parentElement.parentElement
+    .querySelector("[data-product-price]")
+    .innerText.split(" ")[1];
+
+  let discountedPrice = null;
+  if (
+    el.parentElement.parentElement.querySelector(
+      "[data-product-discount-price]"
+    )
+  ) {
+    discountedPrice = el.parentElement.parentElement
+      .querySelector("[data-product-discount-price]")
+      .innerText.split(" ")[1];
+  }
+  console.log(discountedPrice);
+
+  let image = el.parentElement.parentElement
+    .querySelector("[data-product-image]")
+    .getAttribute("src");
+
+  let quantity = 1;
+
+  el.parentElement.parentElement.querySelector(
+    "[data-product-quantity]"
+  ).innerText = 1;
+
+  let cartProduct = {
+    id: id,
+    name: name,
+    unit: unit,
+    price: price,
+    discountedPrice: discountedPrice,
+    quantity: quantity,
+    image: image,
+  };
+
+  cart.push(cartProduct);
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  cartContainer.appendChild(createCartItem(cartProduct));
+
+  updateCartIconBadge();
+  updateCartTotal();
+}
+
+function updateCart() {
+  console.log(cart.length);
+}
+
+function removeFromCart(id) {
+  let cartItems = cartContainer.querySelectorAll("[data-product]");
+  cartItems.forEach((el) => {
+    if (el.id.split("__")[1] != id) return;
+    el.remove();
+  });
+
+  cart = cart.filter((a) => a.id != id);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartTotal();
+
+  let productCards = document.querySelectorAll("[data-product]");
+  productCards.forEach((el) => {
+    if (!el.classList.contains("product-card")) return;
+    if (el.id.split("__")[1] != id) return;
+    el.querySelector("[data-product-footer]").classList.remove("in-cart");
+  });
+
+  if (cart == null || cart.length == 0) {
+    document.querySelector("[data-cart-empty]").style.display = "block";
+  }
+
+  updateCartIconBadge();
+}
+
+function cartItemDecrease(el) {
+  let quantity = el.nextElementSibling.innerText;
+  if (quantity == 1) {
+    let productId =
+      el.parentElement.parentElement.parentElement.id.split("__")[1];
+    removeFromCart(productId);
+    return;
+  }
+
+  quantity--;
+  let productId =
+    el.parentElement.parentElement.parentElement.id.split("__")[1];
+
+  let cards = document.querySelectorAll("[data-product]");
+  cards.forEach((el) => {
+    if (el.id.split("__")[1] != productId) return;
+    el.querySelector("[data-product-quantity]").innerText = quantity;
+    if (quantity <= 5) {
+      el.querySelector("[data-cart-item-increase]").disabled = false;
+    }
+  });
+
+  let produuctIndex = cart.findIndex((a) => a.id == productId);
+  cart[produuctIndex].quantity -= 1;
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartTotal();
+}
+
+function cartItemIncrease(el) {
+  let quantity = el.previousElementSibling.innerText;
+  if (quantity >= 5) return;
+
+  quantity++;
+
+  let productId =
+    el.parentElement.parentElement.parentElement.id.split("__")[1];
+
+  let cards = document.querySelectorAll("[data-product]");
+  cards.forEach((el) => {
+    if (el.id.split("__")[1] != productId) return;
+
+    el.querySelector("[data-product-quantity]").innerText = quantity;
+    if (quantity == 5) {
+      el.querySelector("[data-cart-item-increase]").disabled = true;
+    }
+  });
+
+  let produuctIndex = cart.findIndex((a) => a.id == productId);
+  cart[produuctIndex].quantity += 1;
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartTotal();
+}
+
+function updateProductCards() {
+  let cards = document.querySelectorAll("[data-product]");
+  cards.forEach((el) => {
+    if (el.classList.contains("product-card")) {
+      let id = el.id.split("__")[1];
+    }
+  });
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.hasAttribute("data-add-to-cart")) {
+    addToCart(e.target);
+    e.target.parentElement.classList.add("in-cart");
+  }
+
+  if (e.target.hasAttribute("data-cart-item-decrease")) {
+    cartItemDecrease(e.target);
+  }
+
+  if (e.target.hasAttribute("data-cart-item-increase")) {
+    cartItemIncrease(e.target);
+  }
+
+  if (e.target.hasAttribute("data-cart-item-remove")) {
+    removeFromCart(e.target.parentElement.id.split("__")[1]);
   }
 });

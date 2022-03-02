@@ -1,5 +1,7 @@
 window._ = require("lodash");
 
+window.bootstrap = require("bootstrap");
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -26,18 +28,6 @@ window.Echo = new Echo({
   cluster: "ap2",
   forceTLS: true,
 });
-
-// window.onload = function () {
-//   if (UserId) {
-//     alert(UserId);
-//     Echo.private(`App.User.${UserId}`).notification((notification) => {
-//       //addNotifications([notification], '#notifications');
-//       console.log(JSON.stringify(notification));
-//     });
-//   }
-// };
-
-//Pusher.logToConsole = true;
 
 window.pusher = new Pusher("2e925623f03530b52786", {
   encrypted: true,

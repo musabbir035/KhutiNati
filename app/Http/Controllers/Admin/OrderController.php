@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Service\NotificationService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -13,8 +14,11 @@ class OrderController extends Controller
         return view('admin.order.index', ['orders' => Order::paginate(15)]);
     }
 
-    public function show(Order $order)
+    public function show(Request $request, Order $order)
     {
+        if ($request->has('notif_id')) {
+            NotificationService::markAsRead($request->input('notif_id'));
+        }
         return view('admin.order.show', [
             'order' => $order
         ]);

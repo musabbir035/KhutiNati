@@ -1,13 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\SellerController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebPushController;
 use App\Http\Livewire\Admin\CategoryList;
@@ -15,7 +17,6 @@ use App\Http\Livewire\Admin\OrderList;
 use App\Http\Livewire\Admin\ProductList;
 use App\Http\Livewire\Admin\SellerList;
 use App\Http\Livewire\Admin\UserList;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -47,6 +48,12 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/authenticate', [AuthController::class, 'login'])->name('authenticate');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register-submit', [AuthController::class, 'register'])->name('register.submit');
+Route::get('/password-recovery', [AuthController::class, 'showPasswordRecoveryForm'])->name('password.recovery.form');
+Route::post('/password-recovery', [AuthController::class, 'passwordRecovery'])->name('password.recovery');
+Route::get('/password-recovery-confirm', [AuthController::class, 'showPasswordRecoveryConfirmForm'])->name('password.recovery.confirm.form');
+Route::post('/password-recovery-confirm', [AuthController::class, 'passwordRecoveryConfirm'])->name('password.recovery.confirm');
+
+Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('categories.show');
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -70,10 +77,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('users', AdminUserController::class)->except(['index']);
 
         Route::get('/categories', CategoryList::class)->name('categories.index');
-        Route::resource('categories', CategoryController::class)->except(['index']);
+        Route::resource('categories', AdminCategoryController::class)->except(['index']);
 
         Route::get('/products', ProductList::class)->name('products.index');
-        Route::resource('products', ProductController::class)->except(['index']);
+        Route::resource('products', AdminProductController::class)->except(['index']);
 
         Route::get('/sellers', SellerList::class)->name('sellers.index');
         Route::resource('sellers', SellerController::class)->except(['index']);
