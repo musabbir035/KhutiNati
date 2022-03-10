@@ -7,9 +7,13 @@ use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
+use App\Notifications\UserRegisteredNotification;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
 {
@@ -55,17 +59,25 @@ class AuthController extends Controller
 
     public function register(RegistrationRequest $request)
     {
-        //dd($request);
-        $user = User::create($request->validated() + [
-            'role' => 3
-        ]);
-        Auth::login($user);
-        $request->session()->regenerate();
+        DB::beginTransaction();
+        try {
+            $user = User::create($request->validated() + [
+                'role' => 3
+            ]);
+            Auth::login($user);
+            $request->session()->regenerate();
 
-        if (in_array(Auth::user()->role, [1, 2])) {
-            return redirect()->route('admin.dashboard');
+            $admins = User::whereIn('role', [1, 2])->get();
+            Notification::send($admins, new UserRegisteredNotification($user->name, $user->id));
+
+            DB::commit();
+            return redirect('/');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->withInput()->with([
+                'submit_error' => 'Something went wrong.'
+            ]);
         }
-        return redirect('/');
     }
 
     public function showChangePasswordForm()

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('division_id')->constrained();
             $table->foreignId('district_id')->constrained();
-            $table->foreignId('upazila_id')->constrained();
+            $table->foreignId('area_id')->constrained();
             $table->timestamps();
         });
     }

@@ -1,17 +1,18 @@
 @extends('admin.layout')
 @section('title', 'Add New Product')
 @section('main')
-<div class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <h4>Add New Product</h4>
-      </div>
-      <div class="col-12 col-md-6 text-md-end">
-        <a href="{{ route('admin.products.index') }}" class="btn btn-primary">Product List</a>
-      </div>
-    </div>
-  </div>
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.products.index') }}">Products</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Add New
+    </li>
+  </ol>
+</nav>
+
+<div class="card mt-4">
   <div class="card-body">
     <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" id="addForm">
       @csrf
@@ -135,6 +136,7 @@
 </div>
 @endsection
 @section('pageScripts')
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
   let description = document.querySelector('#descriptionEditor');
   var editor = new Quill(description, {

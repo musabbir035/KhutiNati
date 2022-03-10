@@ -10,7 +10,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Carbon;
 
-class OrderPlacedEvent implements ShouldBroadcast
+class AdminNotificationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,7 +21,7 @@ class OrderPlacedEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(string $title, string $message, $url, $notifId)
+    public function __construct(string $title, string $message, string $url, string $notifId)
     {
         //format data for frontend
         $this->data = [

@@ -152,7 +152,7 @@ window.loadNotifications = (
 ) => {
   dropdownNotificatioLoading.style.display = "block";
   axios
-    .get(`/notifications?skip=${skip}`)
+    .get(`/admin/notifications?skip=${skip}`)
     .then((res) => {
       res.data.notifications.forEach((el) => {
         // populate notifications dropdown

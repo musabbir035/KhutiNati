@@ -1,25 +1,30 @@
 @extends('admin.layout')
 @section('title', $category->name . ' - Category Details')
 @section('main')
-<div class="card mb-4">
-  <div class="card-header">
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.categories.index') }}">Categories</a>
+    </li>
+    <li class="breadcrumb-item active">
+      {{ $category->name }}
+    </li>
+  </ol>
+</nav>
+
+<div class="card mb-4 mt-4">
+  <div class="card-body">
     <div class="row">
-      <div class="col-12 col-sm-6">
-        <h4>Category Details - {{ $category->name }}</h4>
-      </div>
-      <div class="col-12 col-sm-6 mt-2 mt-sm-0 text-sm-end">
-        <a href="{{ route('admin.categories.index') }}" class="btn btn-primary">Category List</a>
-        <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}" class="btn btn-warning">Edit</a>
-        <a href="#" id="delBtn" class="btn btn-danger">Delete</a>
-        <form id="delForm" action="{{ route('admin.categories.destroy', ['category' => $category->id]) }}"
+      <div class="col-12 text-sm-end">
+        <a href="{{ route('admin.categories.edit', ['category' => $category->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+        <a href="#" id="delBtn" class="btn btn-danger btn-sm">Delete</a>
+        <form id="delForm" class="d-none" action="{{ route('admin.categories.destroy', ['category' => $category->id]) }}"
           method="POST">
           @csrf
           <input type="hidden" name="_method" value="DELETE">
         </form>
       </div>
     </div>
-  </div>
-  <div class="card-body">
     <img src="{{ asset($category->image_file) }}" alt="" class="mb-2 details-img">
     <div class="details-item row">
       <label class="col-12 col-md-4 col-lg-2">Name </label>

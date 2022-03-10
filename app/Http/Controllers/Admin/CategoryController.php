@@ -23,15 +23,15 @@ class CategoryController extends Controller
     {
         try {
             DB::transaction(function () use ($request) {
-                $Category = Category::create([
+                $category = Category::create([
                     'name' => $request->input('name'),
                     'parent_id' => $request->input('parent_id'),
                     'slug' => $this->generateSlug($request->input('name'), new Category())
                 ]);
 
                 if ($request->hasFile('image')) {
-                    $Category->image = Service::uploadImage($request->file('image'), $Category->id, 'images/categories');
-                    $Category->save();
+                    $category->image = Service::uploadImage($request->file('image'), $category->id, 'images/categories');
+                    $category->save();
                 }
             }, 3);
         } catch (Exception $e) {

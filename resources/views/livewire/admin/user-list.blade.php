@@ -3,17 +3,16 @@
 	<div wire:loading>
 		@livewire('loading')
 	</div>
-	<div class="card">
-		<div class="card-header">
-			<div class="row">
-				<div class="col-12 col-md-6">
-					<h4>Users</h4>
-				</div>
-				<div class="col-12 col-md-6 text-md-end">
-					<a href="{{ route('admin.users.create') }}" class="btn btn-primary">Add New</a>
-				</div>
-			</div>
-		</div>
+	<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Users</li>
+      <li class="breadcrumb-item ms-auto" style="--bs-breadcrumb-divider: '';">
+        <a href="{{ route('admin.users.create') }}" class="btn btn-primary btn-sm">Add New</a>
+      </li>
+    </ol>
+  </nav>
+
+	<div class="card mt-4">
 		<div class="card-body">
 			<div class="row">
 				<div class="col-12 col-md-6 col-lg-4 mb-3">
@@ -65,12 +64,17 @@
 						</td>
 						<td>{{ date('d-M-Y h:i a', strtotime($user->created_at)) }}</td>
 						<td>
-							<a href="{{ route('admin.users.show', ['user' => $user->id]) }}" class="btn btn-info btn-xs mt-1">
-								Details
+							<a href="{{ route('admin.users.show', ['user' => $user->id]) }}"
+								class="btn btn-info btn-xs btn-tool mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+								title="Details">
+								<i class="fa-solid fa-file-lines"></i>
 							</a>
 							@if((auth()->user()->role == \App\Models\User::$SUPERADMIN && $user->role != \App\Models\User::$CUSTOMER) || auth()->id() == $user->id )
 							<a href="{{ route('admin.users.edit', ['user' => $user->id]) }}"
-								class="btn btn-warning btn-xs mt-1">Edit</a>
+								class="btn btn-warning btn-xs btn-tool mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+								title="Edit">
+								<i class="fa-solid fa-pen-to-square"></i>
+							</a>
 							@endif
 							@if(auth()->user()->role < $user->role && auth()->id() != $user->id)
 							@if($user->deleted_at)

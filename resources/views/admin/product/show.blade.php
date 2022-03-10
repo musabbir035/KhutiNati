@@ -1,24 +1,30 @@
 @extends('admin.layout')
 @section('title', 'Product Details')
 @section('main')
-<div class="card">
-  <div class="card-header">
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.products.index') }}">Products</a>
+    </li>
+    <li class="breadcrumb-item active">
+      {{ $product->name }}
+    </li>
+  </ol>
+</nav>
+
+<div class="card mt-4">
+  <div class="card-body">
     <div class="row">
-      <div class="col-12 col-sm-6">
-        <h4>Product Details - {{ $product->name }}</h4>
-      </div>
-      <div class="col-12 col-sm-6 mt-2 mt-sm-0 text-sm-end">
-        <a href="{{ route('admin.products.index') }}" class="btn btn-primary">Product List</a>
-        <a href="{{ route('admin.products.edit', ['product' => $product->id]) }}" class="btn btn-warning">Edit</a>
-        <a href="#" id="delBtn" class="btn btn-danger">Delete</a>
-        <form id="delForm" action="{{ route('admin.products.destroy', ['product' => $product->id]) }}" method="POST">
+      <div class="col-12 text-sm-end">
+        <a href="{{ route('admin.products.edit', ['product' => $product->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+        <a href="#" id="delBtn" class="btn btn-danger btn-sm">Delete</a>
+        <form id="delForm" class="d-none" action="{{ route('admin.products.destroy', ['product' => $product->id]) }}" method="POST">
           @csrf
           <input type="hidden" name="_method" value="DELETE">
         </form>
       </div>
     </div>
-  </div>
-  <div class="card-body">
+
     <img src="{{ asset($product->image_file) }}" alt="" class="mb-2 details-img">
     <div class="details-item row">
       <label class="col-12 col-md-4 col-lg-2">Name </label>

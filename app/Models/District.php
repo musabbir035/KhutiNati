@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Address[] $addresses
  * @property-read int|null $addresses_count
  * @property-read \App\Models\Division $division
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Upazila[] $upazilas
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Area[] $upazilas
  * @property-read int|null $upazilas_count
  * @method static \Illuminate\Database\Eloquent\Builder|District newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|District newQuery()
@@ -42,7 +42,7 @@ class District extends Model
 
     public function upazilas()
     {
-        return $this->hasMany(Upazila::class);
+        return $this->hasMany(Area::class);
     }
 
     public function addresses()

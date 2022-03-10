@@ -2,11 +2,9 @@
 
 namespace App\Notifications;
 
-use App\Events\OrderPlacedEvent;
+use App\Events\AdminNotificationEvent;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\WebPush\WebPushChannel;
 use NotificationChannels\WebPush\WebPushMessage;
@@ -15,13 +13,8 @@ class OrderPlacedNotification extends Notification
 {
     use Queueable;
 
-    private $customerName, $order, $title, $message, $url;
+    private $customerName, $title, $message, $url;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
     public function __construct(string $customerName, Order $order)
     {
         $this->title = $customerName . ' placed an order.';
@@ -29,12 +22,6 @@ class OrderPlacedNotification extends Notification
         $this->url = route('admin.orders.show', ['order' => $order->id]);
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function via($notifiable)
     {
         return ['database', WebPushChannel::class];
@@ -50,15 +37,9 @@ class OrderPlacedNotification extends Notification
             ->data(['url' => $this->url  . '?notif_id=' . $this->id]);
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
     public function toArray($notifiable)
     {
-        event(new OrderPlacedEvent($this->title, $this->message, $this->url, $this->id));
+        event(new AdminNotificationEvent($this->title, $this->message, $this->url, $this->id));
 
         return [
             'title' => $this->title,

@@ -3,14 +3,13 @@
   <div wire:loading>
     @livewire('loading')
   </div>
-  <div class="card">
-    <div class="card-header">
-      <div class="row">
-        <div class="col-12 col-sm-6">
-          <h4>Orders</h4>
-        </div>
-      </div>
-    </div>
+  <nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Orders</li>
+    </ol>
+  </nav>
+
+  <div class="card mt-4">
     <div class="card-body">
       @if($orders->count())
       <div class="table-responsive">
@@ -30,7 +29,7 @@
             <td>{{ $order->address->mobile }}</td>
             <td>
               {{ $order->address->address }},
-              {{ $order->address->upazila->name }},
+              {{ $order->address->area->name }},
               {{ $order->address->district->name }},
               {{ $order->address->division->name }}
             </td>
@@ -48,8 +47,9 @@
               @endif
             </td>
             <td>
-              <a href="{{ route('admin.orders.show', ['order' => $order->id]) }}" class="btn btn-xs btn-info mt-1">
-                Details
+              <a href="{{ route('admin.orders.show', ['order' => $order->id]) }}" class="btn btn-xs btn-info mt-1 btn-tool" data-bs-toggle="tooltip" data-bs-placement="bottom"
+								title="Details">
+								<i class="fa-solid fa-file-lines"></i>
               </a>
             </td>
           </tr>

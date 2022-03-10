@@ -1,17 +1,17 @@
 @extends('admin.layout')
 @section('title', 'Add New User')
 @section('main')
-<div class="card mt-3">
-  <div class="card-header bg-light">
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <h4>Add New User</h4>
-      </div>
-      <div class="col-12 col-md-6 text-md-end">
-        <a href="{{ route('admin.users.index') }}" class="btn btn-primary">User List</a>
-      </div>
-    </div>
-  </div>
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.users.index') }}">Users</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Add New
+    </li>
+  </ol>
+</nav>
+<div class="card mt-4">
   <div class="card-body">
     <form action="{{ route('admin.users.store') }}" method="POST">
       @csrf

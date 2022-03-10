@@ -4,36 +4,37 @@
 <div id="loadingSpinner" style="display: none">
   @livewire('loading')
 </div>
-<div class="card">
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.users.index') }}">Users</a>
+    </li>
+    <li class="breadcrumb-item">
+      @if(auth()->id() == $user->id)
+        My Account
+      @else
+        {{ $user->name }}
+      @endif
+    </li>
+  </ol>
+</nav>
+
+<div class="card mt-4">
   <div class="card-header">
     <div class="row">
-      <div class="col-12 col-md-6">
-        <h4>
-          @if($user->id == auth()->id())
-          My Account
-          @else
-          User Details - {{ $user->name }}
-          @endif
-        </h4>
-      </div>
-      <div class="col-12 col-md-6 mt-2 mt-sm-0 text-md-end">
-        <a href="{{ route('admin.users.index') }}" class="btn btn-primary mt-1">User List</a>
-        <a href="{{ route('admin.users.edit', ['user' => $user->id]) }}" class="btn btn-warning mt-1">Edit</a>
+      <div class="col-12 text-md-end">
+        <a href="{{ route('admin.users.edit', ['user' => $user->id]) }}" class="btn btn-warning btn-sm">Edit</a>
         @if(auth()->user()->role < $user->role && auth()->id() != $user->id)
           @if($user->deleted_at)
-          <a href="#" id="statusUpdateBtn" class="btn btn-success mt-1">
+          <a href="#" id="statusUpdateBtn" class="btn btn-success btn-sm">
             Activate
           </a>
           @else
-          <a href="#" id="statusUpdateBtn" class="btn btn-danger mt-1">
+          <a href="#" id="statusUpdateBtn" class="btn btn-danger btn-sm">
             Deactivate
           </a>
           @endif
-
-          @endif
-          @if(auth()->id() == $user->id)
-          <a href="{{ route('change-password') }}" class="btn btn-success mt-1">Change Password</a>
-          @endif
+        @endif
       </div>
     </div>
   </div>

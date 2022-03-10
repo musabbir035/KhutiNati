@@ -1,19 +1,55 @@
+window.bootstrap = require("bootstrap");
+window.axios = require("axios");
+
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+window.axios.defaults.baseURL = "http://khutinati.test";
+
 let sidebarCart = document.querySelector("[data-sidebar-cart]");
 let cartOpenBtn = document.querySelector("[data-cart-open-btn]");
+
+window.showFullPageLoading = () => {
+  const backdrop = document.createElement("div");
+  backdrop.classList.add("loader-backdrop");
+
+  const loader = document.createElement("div");
+  loader.classList.add("loader");
+  backdrop.appendChild(loader);
+  document.body.appendChild(backdrop);
+};
+window.hideFullPageLoading = () => {
+  document.querySelector(".loader-backdrop").remove();
+};
+
+// NOTE: Opens sidebar cart
 cartOpenBtn.addEventListener("click", () => {
   sidebarCart.classList.toggle("open");
 });
 
+// NOTE: Closes sidebar cart
 let cartCloseBtn = document.querySelector("[data-cart-close-btn]");
 cartCloseBtn.addEventListener("click", () => {
   sidebarCart.classList.toggle("open");
 });
 
+// NOTE: Opens/closes submenu in category multilevel menu
 let categoryMobileItems = document.querySelectorAll("[data-cartgory-dropdown]");
 categoryMobileItems.forEach((el) => {
   el.addEventListener("click", (e) => {
     el.parentElement.classList.toggle("open");
   });
+});
+
+// NOTE: Adds shadow to header and hides .navbar-top when scrolled down
+window.addEventListener("scroll", (e) => {
+  const header = document.querySelector("[data-fixed-haeder]");
+  const navTop = document.querySelector(".navbar-top");
+  if (window.pageYOffset > 0) {
+    header.classList.add("shadow");
+    navTop.style.display = "none";
+  } else {
+    header.classList.remove("shadow");
+    navTop.style.display = "block";
+  }
 });
 
 /*****
@@ -44,7 +80,7 @@ function initCart(cartItems) {
   updateCartTotal();
 }
 
-// Updates sum of price of all products added to the cart
+// NOTE: Updates sum of prices of all products added to the cart
 function updateCartTotal() {
   let cartPrices = cart.map((a) =>
     a.discountedPrice ? a.discountedPrice * a.quantity : a.price * a.quantity
@@ -90,7 +126,7 @@ function updateCartIconBadge() {
   cartOpenBtn.querySelector("span").innerText = "";
 }
 
-// Creats individual cart product DOM element for sidebar cart
+// NOTE: Creats individual cart product DOM element for sidebar cart
 function createCartItem(product) {
   let finalPrice = product.price;
   if (product.discountedPrice) {
@@ -102,12 +138,12 @@ function createCartItem(product) {
   cartItem.setAttribute("id", "product__" + product.id);
   cartItem.setAttribute("data-product", "");
 
-  cartItemInner = `
+  let cartItemInner = `
     <img class="cart-item-img" src="${product.image}" alt="" data-product-image>
     <div class="cart-item-details">
       <div class="cart-item-title" data-product-name>${product.name}</div>
       <div class="cart-item-unit">
-        <span data-product-price>৳ ${finalPrice}</span> / 
+        <span data-product-price>৳ ${finalPrice}</span> /
         <span data-product-unit>${product.unit}</span>
       </div>
       <div class="cart-item-tools">
@@ -131,7 +167,7 @@ function createCartItem(product) {
   return cartItem;
 }
 
-// Adds products to sidebar cart and
+// NOTE: Adds products to sidebar cart and
 // also stores them in the local storage
 function addToCart(el) {
   document.querySelector("[data-cart-empty]").style.display = "none";
@@ -191,10 +227,8 @@ function addToCart(el) {
   updateCartTotal();
 }
 
-function updateCart() {
-  console.log(cart.length);
-}
-
+// NOTE: Removes product from sidebar cart localstorage and
+// updates product card on the page accordingly
 function removeFromCart(id) {
   let cartItems = cartContainer.querySelectorAll("[data-product]");
   cartItems.forEach((el) => {

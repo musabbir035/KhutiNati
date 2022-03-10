@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\District;
 use App\Models\Division;
-use App\Models\Upazila;
+use App\Models\Area;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,15 +20,15 @@ class DivisionSeeder extends Seeder
                 'name' => $division
             ]);
 
-            foreach ($districts as $district => $upazilas) {
+            foreach ($districts as $district => $areas) {
                 $dist = District::create([
                     'name' => $district,
                     'division_id' => $div->id
                 ]);
 
-                foreach ($upazilas as $upazila) {
-                    Upazila::create([
-                        'name' => $upazila,
+                foreach ($areas as $area) {
+                    Area::create([
+                        'name' => $area,
                         'district_id' => $dist->id
                     ]);
                 }

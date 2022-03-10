@@ -16,12 +16,6 @@ class OrderRequest extends FormRequest
     {
         return [
             'address_id' => 'nullable|exists:addresses,id',
-            'name' => 'required_without:addressId|string|max:255',
-            'mobile' => 'required_without:addressId|string|max:11',
-            'address' => 'required_without:addressId|string|max:255',
-            'upazila_id' => 'required_without:addressId|exists:upazilas,id',
-            'district_id' => 'required_without:addressId|exists:districts,id',
-            'division_id' => 'required_without:addressId|exists:divisions,id',
             'orderProducts.*.id' => 'required|exists:products,id',
             'orderProducts.*.quantity' => 'required|integer|min:1',
         ];

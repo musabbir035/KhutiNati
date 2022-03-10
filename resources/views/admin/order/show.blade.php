@@ -4,6 +4,17 @@
 <div id="loadingSpinner" style="display: none">
   @livewire('loading')
 </div>
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">
+      <a href="{{ route('admin.orders.index') }}">Orders</a>
+    </li>
+    <li class="breadcrumb-item active">
+      {{ $seller->id }}
+    </li>
+  </ol>
+</nav>
+
 <div class="card">
   <div class="card-header">
     <div class="row">
@@ -46,7 +57,7 @@
       <label class="col-12 col-md-4 col-lg-2 fw-bold">Address</label>
       <span class="col-12 col-md-8 col-lg-10">
         {{ $order->address->address }},
-        {{ $order->address->upazila->name }},
+        {{ $order->address->area->name }},
         {{ $order->address->district->name }},
         {{ $order->address->division->name }}
       </span>

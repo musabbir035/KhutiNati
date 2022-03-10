@@ -14,7 +14,7 @@
         <div class="mb-3">
           <label for="username">Email or Mobile Number</label>
           <input type="text" id="username" name="username" placeholder="Enter email or mobile number"
-            class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}">
+            class="form-control mt-1 @error('username') is-invalid @enderror" value="{{ old('username') }}">
           @error('username')
           <div class="text-danger">{{ $message }}</div>
           @enderror
@@ -23,7 +23,7 @@
         <div class="mb-2">
           <label for="password">Password</label>
           <input type="password" id="password" name="password" placeholder="Enter password"
-            class="form-control @error('password') is-invalid @enderror">
+            class="form-control mt-1 @error('password') is-invalid @enderror">
           @error('password')
           <div class="text-danger">{{ $message }}</div>
           @enderror
@@ -38,7 +38,7 @@
 
         <div class="text-danger">{{ session('error') }}</div>
 
-        <button type="submit" class="btn btn-primary btn-login mt-3">Login</button>
+        <button type="submit" class="btn btn-primary btn-wide mt-3">Login</button>
       </form>
       <a href="{{ route('password.recovery.form') }}" class="link-primary text-decoration-none font-sm">Forgot
         password?</a>

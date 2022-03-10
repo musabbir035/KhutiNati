@@ -84,7 +84,6 @@ class Product extends Model
         $isOnSale = null,
         $isFeatured = null
     ) {
-        //return $isFeatured;
         return $query->when($searchQuery, function ($q) use ($searchQuery) {
             return $q->where('name', 'like', '%' . $searchQuery . '%');
         })->when($categoryId, function ($q) use ($categoryId) {

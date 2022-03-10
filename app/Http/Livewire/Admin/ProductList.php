@@ -40,6 +40,7 @@ class ProductList extends Component
     public function deleteProduct($id)
     {
         $delOperation = ProductService::deleteProduct($id);
+        $this->updateList();
         $this->emit('productDeleted', $delOperation['title'], $delOperation['message'], $delOperation['code']);
     }
 }

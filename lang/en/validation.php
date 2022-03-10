@@ -148,7 +148,7 @@ return [
             'deactivated' => 'Your account has been deactivated.'
         ],
         'password' => [
-            'required' => 'Please enter your password.',
+            'required' => 'Please enter a password.',
             'min' => 'Password must contain at least :min characters',
             'max' => 'Password cannot contain more than :max characters',
         ],
@@ -203,13 +203,14 @@ return [
             '*' => 'Invalid data provided.',
         ],
         'image' => [
+            'required' => 'Please select an image.',
             'mimes' => 'Invalid image type. Allowed types are :values.',
             'max' => 'Image size should not be more than 1MB.'
         ],
         'address' => [
             'required' => 'Please enter an address.'
         ],
-        'upazila' => [
+        'area' => [
             'exists' => 'Area not found.',
             'required' => 'Please select an area.'
         ],
@@ -225,9 +226,32 @@ return [
             'exists' => 'Product not found.',
             'quantity' => 'Please enter quantity.'
         ],
-        // 'division' => [
-        //     'exists' => 'Division not found.'
-        // ],
+        'title' => [
+            'required' => 'Please enter a title.'
+        ],
+        'type' => [
+            'required' => 'Please select a type.'
+        ],
+        'code' => [
+            'required' => 'Please enter a code.',
+            'unique' => 'Code already exists.',
+            'max' => 'Code is too long. Must be 255 characters or less.'
+        ],
+        'discount_percentage' => [
+            'required' => 'Please enter discount percentage.',
+            'integer' => 'Discount percentage must be an integer number.',
+            'between' => 'Discount percentage must be a number between 1 and 99.',
+        ],
+        'maximum_discount' => [
+            'integer' => 'Maximum discount must be an integer number.',
+            'min' => 'Maximum discount cannot be less than 1.',
+        ],
+        'validity_start' => [
+            'required' => 'Please enter validity start date.'
+        ],
+        'validity_end' => [
+            'required' => 'Please enter validity expiry date.'
+        ],
     ],
 
     'invalid-request' => 'Invalid request',

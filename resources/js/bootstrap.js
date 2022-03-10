@@ -2,15 +2,12 @@ window._ = require("lodash");
 
 window.bootstrap = require("bootstrap");
 
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
-window.axios = require("axios");
-
-window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+var tooltipTriggerList = [].slice.call(
+  document.querySelectorAll('[data-bs-toggle="tooltip"]')
+);
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl);
+});
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -39,3 +36,23 @@ window.pusher = new Pusher("2e925623f03530b52786", {
     },
   },
 });
+
+window.coundownTimer = (el, date = new Date().getTime()) => {
+  setInterval(() => {
+    let coundownDate = new Date(date).getTime();
+    let now = new Date().getTime();
+    let diff = coundownDate - now;
+
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    if (diff < 0) {
+      el.innerHTML = '<span class="text-danger">Expired</>';
+      clearInterval(this);
+    } else {
+      el.innerHTML = `<span class="text-success">${days}d ${hours}h ${minutes}m ${seconds}s</span>`;
+    }
+  }, 1000);
+};

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\Upazila
+ * App\Models\Area
  *
  * @property int $id
  * @property string $name
@@ -14,15 +14,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Address[] $addresses
  * @property-read int|null $addresses_count
  * @property-read \App\Models\District $district
- * @method static \Illuminate\Database\Eloquent\Builder|Upazila newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Upazila newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Upazila query()
- * @method static \Illuminate\Database\Eloquent\Builder|Upazila whereDistrictId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Upazila whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Upazila whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Area newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Area query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereDistrictId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereName($value)
  * @mixin \Eloquent
  */
-class Upazila extends Model
+class Area extends Model
 {
     use HasFactory;
 

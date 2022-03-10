@@ -15,13 +15,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property int $division_id
  * @property int $district_id
- * @property int $upazila_id
+ * @property int $area_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\District $district
  * @property-read \App\Models\Division $division
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Order[] $orders
- * @property-read \App\Models\Upazila $upazila
+ * @property-read \App\Models\Area $area
  * @property-read \App\Models\User $user
  * @mixin \Eloquent
  */
@@ -33,7 +33,7 @@ class Address extends Model
         'name',
         'mobile',
         'address',
-        'upazila_id',
+        'area_id',
         'district_id',
         'division_id',
         'user_id'
@@ -54,9 +54,9 @@ class Address extends Model
         return $this->belongsTo(District::class);
     }
 
-    public function upazila()
+    public function area()
     {
-        return $this->belongsTo(Upazila::class);
+        return $this->belongsTo(Area::class);
     }
 
     public function orders()

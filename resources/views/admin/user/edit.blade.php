@@ -1,17 +1,27 @@
 @extends('admin.layout')
 @section('title', $user->name . (auth()->id() === $user->id ? ' - Edit Account' : ' - Edit User'))
 @section('main')
-<div class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <h4>{{(auth()->id() === $user->id ? 'Edit Account' : 'Edit User')}} - {{ $user->name }}</h4>
-      </div>
-      <div class="col-12 col-md-6 text-md-end">
-        <a href="{{ route('admin.users.index') }}" class="btn btn-primary">User List</a>
-      </div>
-    </div>
-  </div>
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.users.index') }}">Users</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.users.show', ['user' => $user->id]) }}">
+        @if(auth()->id() == $user->id)
+        My Account
+        @else
+        {{ $user->name }}
+        @endif
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Edit
+    </li>
+  </ol>
+</nav>
+
+<div class="card mt-4">
   <div class="card-body">
     <form action="{{ route('admin.users.update', ['user' => $user]) }}" method="POST">
       @csrf

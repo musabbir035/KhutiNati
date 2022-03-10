@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
@@ -32,6 +33,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/place-order', [OrderController::class, 'create']);
+
+Route::get('/districts', [AddressController::class, 'districts']);
+Route::get('/areas', [AddressController::class, 'areas']);
 
 Route::middleware('auth:sanctum')->group(function () {
 });

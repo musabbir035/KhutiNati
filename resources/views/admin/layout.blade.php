@@ -39,6 +39,13 @@
         </a>
       </li>
       <li class="nav-item">
+        <a href="{{ route('admin.orders.index') }}"
+          class="nav-link {{ request()->is('admin/orders*') ? 'active' : '' }}">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+          Orders
+        </a>
+      </li>
+      <li class="nav-item">
         <a href="{{ route('admin.users.index') }}"
           class="nav-link {{ request()->is('admin/users*') || request()->is('admin/account') || request()->is('change-password') ? 'active' : '' }}">
           <i class="fa-solid fa-users"></i>
@@ -67,10 +74,17 @@
         </a>
       </li>
       <li class="nav-item">
-        <a href="{{ route('admin.orders.index') }}"
-          class="nav-link {{ request()->is('admin/orders*') ? 'active' : '' }}">
-          <i class="fa-solid fa-file-invoice-dollar"></i>
-          Orders
+        <a href="{{ route('admin.coupons.index') }}"
+          class="nav-link {{ request()->is('admin/coupons*') ? 'active' : '' }}">
+          <i class="fa-solid fa-tags"></i>
+          Coupon Codes
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ route('admin.banner-images.index') }}"
+          class="nav-link {{ request()->is('admin/banner-images*') ? 'active' : '' }}">
+          <i class="fa-solid fa-images"></i>
+          Banner Images
         </a>
       </li>
     </ul>
@@ -147,7 +161,7 @@
     </div>
   </div>
 
-  <script src="//js.pusher.com/3.1/pusher.min.js"></script>
+  <script src="https://js.pusher.com/3.1/pusher.min.js"></script>
   <script src="{{ asset('js/admin.js') }}"></script>
   <script src="{{ asset('js/push.js') }}"></script>
   <script>

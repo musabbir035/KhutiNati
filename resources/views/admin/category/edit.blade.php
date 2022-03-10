@@ -1,17 +1,23 @@
 @extends('admin.layout')
 @section('title', $category->name . ' - Edit Category')
 @section('main')
-<div class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <h4>Edit Category - {{ $category->name }}</h4>
-      </div>
-      <div class="col-12 col-md-6 text-md-end">
-        <a href="{{ route('admin.categories.index') }}" class="btn btn-primary">Category List</a>
-      </div>
-    </div>
-  </div>
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.categories.index') }}">Categories</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.categories.show', ['category' => $category->id]) }}">
+        {{ $category->name }}
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Edit
+    </li>
+  </ol>
+</nav>
+
+<div class="card mt-4">
   <div class="card-body">
     <form action="{{ route('admin.categories.update', ['category' => $category->id]) }}" method="POST"
       enctype="multipart/form-data">

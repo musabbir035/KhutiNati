@@ -1,17 +1,18 @@
 @extends('admin.layout')
 @section('title', 'Add New Seller')
 @section('main')
-<div class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <h4>Add New Seller</h4>
-      </div>
-      <div class="col-12 col-md-6 text-md-end">
-        <a href="{{ route('admin.sellers.index') }}" class="btn btn-primary">Seller List</a>
-      </div>
-    </div>
-  </div>
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.sellers.index') }}">Sellers</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Add New
+    </li>
+  </ol>
+</nav>
+
+<div class="card mt-4">
   <div class="card-body">
     <form action="{{ route('admin.sellers.store') }}" method="POST" enctype="multipart/form-data">
       @csrf

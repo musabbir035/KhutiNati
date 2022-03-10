@@ -1,18 +1,23 @@
 @extends('admin.layout')
 @section('title', $product->name . ' - Edit Product')
 @section('main')
-<div class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <h4>Edit Product - {{ $product->name }}</h4>
-      </div>
-      <div class="col-12 col-md-6 text-md-end">
-        <a href="{{ route('admin.products.index') }}" class="btn btn-primary">Product List</a>
-        <a href="{{ route('admin.products.show', ['product' => $product->id]) }}" class="btn btn-info">Details</a>
-      </div>
-    </div>
-  </div>
+<nav style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.products.index') }}">Products</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{{ route('admin.products.show', ['product' => $product->id]) }}">
+        {{ $product->name }}
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      Edit
+    </li>
+  </ol>
+</nav>
+
+<div class="card mt-4">
   <div class="card-body">
     <form action="{{ route('admin.products.update', ['product' => $product->id]) }}" method="POST" id="editForm"
       enctype="multipart/form-data">
@@ -129,6 +134,9 @@
           <label for="image">Image (optional)</label>
           <input type="file" name="image" id="image" placeholder="Enter an unit"
             class="form-control @error('image') is-invalid @enderror" accept=".jpg,.jpeg,.png,.webp">
+          <img class="img-upload-preview"
+            src="{{ asset($product->image ? 'storage/images/products/'.$product->image : 'img/no-image.png') }}" alt=""
+            data-img-preview>
           @error('image')
           <div class="text-danger">{{ $message }}</div>
           @enderror
@@ -147,6 +155,7 @@
 </div>
 @endsection
 @section('pageScripts')
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
   let description = document.querySelector('#descriptionEditor');
   var editor = new Quill(description, {
@@ -165,6 +174,16 @@
     e.preventDefault();
     document.querySelector('#description').value = editor.root.innerHTML;
     form.submit();
+  })
+
+  document.querySelector('#image').addEventListener('change', () => {
+    const file = document.querySelector('#image').files[0]
+    const preview = document.querySelector('[data-img-preview]');
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      return;
+    }
+    preview.src = '{{ asset($product->image ? 'storage/images/products/'.$product->image : 'img/no-image.png') }}';
   })
 </script>
 @endsection

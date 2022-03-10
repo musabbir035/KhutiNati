@@ -1,4 +1,7 @@
 @if ($paginator->hasPages())
+@php(isset($this->numberOfPaginatorsRendered[$paginator->getPageName()]) ?
+$this->numberOfPaginatorsRendered[$paginator->getPageName()]++ :
+$this->numberOfPaginatorsRendered[$paginator->getPageName()] = 1)
 <nav class="d-flex justify-items-center justify-content-between">
   <div class="d-flex justify-content-between flex-fill d-sm-none">
     <ul class="pagination">
@@ -9,14 +12,20 @@
       </li>
       @else
       <li class="page-item">
-        <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev">@lang('pagination.previous')</a>
+        <button type="button"
+          dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}"
+          class="page-link" wire:click="previousPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled"
+          rel="prev">@lang('pagination.previous')</button>
       </li>
       @endif
 
       {{-- Next Page Link --}}
       @if ($paginator->hasMorePages())
       <li class="page-item">
-        <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next">@lang('pagination.next')</a>
+        <button type="button"
+          dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}"
+          class="page-link" wire:click="nextPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled"
+          rel="next">@lang('pagination.next')</button>
       </li>
       @else
       <li class="page-item disabled" aria-disabled="true">
@@ -48,8 +57,10 @@
         </li>
         @else
         <li class="page-item">
-          <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev"
-            aria-label="@lang('pagination.previous')">&lsaquo;</a>
+          <button type="button"
+            dusk="previousPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}"
+            class="page-link" wire:click="previousPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled"
+            rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</button>
         </li>
         @endif
 
@@ -64,9 +75,16 @@
         @if (is_array($element))
         @foreach ($element as $page => $url)
         @if ($page == $paginator->currentPage())
-        <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
+        <li class="page-item active"
+          wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-{{ $page }}"
+          aria-current="page"><span class="page-link">{{ $page }}</span></li>
         @else
-        <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+        <li class="page-item"
+          wire:key="paginator-{{ $paginator->getPageName() }}-{{ $this->numberOfPaginatorsRendered[$paginator->getPageName()] }}-page-{{ $page }}">
+          <button type="button" class="page-link"
+            wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')">{{
+            $page }}</button>
+        </li>
         @endif
         @endforeach
         @endif
@@ -75,8 +93,10 @@
         {{-- Next Page Link --}}
         @if ($paginator->hasMorePages())
         <li class="page-item">
-          <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next"
-            aria-label="@lang('pagination.next')">&rsaquo;</a>
+          <button type="button"
+            dusk="nextPage{{ $paginator->getPageName() == 'page' ? '' : '.' . $paginator->getPageName() }}"
+            class="page-link" wire:click="nextPage('{{ $paginator->getPageName() }}')" wire:loading.attr="disabled"
+            rel="next" aria-label="@lang('pagination.next')">&rsaquo;</button>
         </li>
         @else
         <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
