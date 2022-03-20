@@ -11,6 +11,10 @@ class Service
         $imageName = $image->hashName();
         $imageFinalName = $modelId . $imageName;
 
+        if(!Storage::disk('public')->exists($storagePath)) {
+            Storage::disk('public')->makeDirectory($storagePath);
+        }
+
         Storage::disk('public')->putFileAs($storagePath, $image, $imageFinalName);
 
         return $imageFinalName;
@@ -31,6 +35,9 @@ class Service
         // then no need to delete (it will be overwriten).
         if ($oldImageName != $fileName && Storage::disk('public')->exists($storagePath . $oldImageName)) {
             Storage::disk('public')->delete($storagePath . $oldImageName);
+        }
+        if(Storage::disk('public')->exists($storagePath)) {
+            Storage::disk('public')->makeDirectory($storagePath);
         }
         Storage::disk('public')->putFileAs($storagePath, $image, $fileName);
         return $fileName;

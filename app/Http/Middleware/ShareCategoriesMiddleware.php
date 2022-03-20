@@ -18,7 +18,8 @@ class ShareCategoriesMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        View::share('categories', Category::doesntHave('parent')->get());
+        //TODO: Optimize query, solve n + 1 query problem.
+        View::share('categories', Category::with('children')->doesntHave('parent')->get());
         return $next($request);
     }
 }

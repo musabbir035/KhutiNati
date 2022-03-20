@@ -81,7 +81,7 @@
                 <button class="btn" type="button" id="button-addon2">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
-              </div>
+            </div>
             </li>
           </ul>
         </div>

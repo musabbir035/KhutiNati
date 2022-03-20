@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Seller;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class CategorySeeder extends Seeder
 {
@@ -19,19 +20,6 @@ class CategorySeeder extends Seeder
 
     public function run()
     {
-        // $sellers = Seller::all();
-
-        // Category::factory(10)->create()->each(
-        //     function ($category) use ($sellers) {
-        //         for ($i = 0; $i <= 5; $i++) {
-        //             Product::factory([
-        //                 'category_id' => $category->id,
-        //                 'seller_id' => 1 == 1 ? $sellers->random(1)->first()->id : null
-        //             ])->create();
-        //         }
-        //     }
-        // );
-
         $categories = [
             [
                 'name' => 'Foods',
@@ -310,6 +298,13 @@ class CategorySeeder extends Seeder
 
             ]
         ];
+
+        if(!Storage::disk('public')->exists('images/products')) {
+            Storage::disk('public')->makeDirectory('images/products');
+        }
+        if(!Storage::disk('public')->exists('images/categories')) {
+            Storage::disk('public')->makeDirectory('images/categories');
+        }
         $this->insertCategory($categories);
     }
 

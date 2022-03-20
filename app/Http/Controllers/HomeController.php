@@ -15,13 +15,20 @@ class HomeController extends Controller
         //     ->where('status', BannerImage::$ACTIVE)
         //     ->orderBy('created_at', 'desc')
         //     ->limit(5)->get());
+
+        // return view('main.home', [
+        //     //'categories' => Category::doesntHave('parent')->get(),
+        //     'sales' => Product::whereNotNull('discounted_price')->limit(8)->get(),
+        //     'sliderImages' => BannerImage::where('type', BannerImage::$SLIDER)
+        //         ->where('status', BannerImage::$ACTIVE)
+        //         ->orderBy('created_at', 'desc')
+        //         ->limit(5)->get()
+        // ]);
+
         return view('main.home', [
             //'categories' => Category::doesntHave('parent')->get(),
-            'sales' => Product::whereNotNull('discounted_price')->limit(8)->get(),
-            'sliderImages' => BannerImage::where('type', BannerImage::$SLIDER)
-                ->where('status', BannerImage::$ACTIVE)
-                ->orderBy('created_at', 'desc')
-                ->limit(5)->get()
+            'sales' => [],
+            'sliderImages' => []
         ]);
     }
 }
